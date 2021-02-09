@@ -1,27 +1,32 @@
-import { Point } from './utils';
+import { Vector2, addVector2 } from './utils';
 
 export class Turtle {
 
   private context: CanvasRenderingContext2D;
-  private pos: Point;
-  private size: number;
+  private pos: Vector2;
+  private dir: Vector2;
 
-  constructor(context: CanvasRenderingContext2D, pos: Point) {
+  constructor(context: CanvasRenderingContext2D, pos: Vector2) {
     this.context = context;
     this.pos = pos;
-    this.size = 50;
+    this.dir = { x: 1, y: 0 }
+  }
+
+  update() {
+    this.pos = addVector2(this.pos, this.dir);
   }
 
   draw() {
-    let context = this.context;
-    context.lineCap = 'round';
-    context.lineJoin = 'round';
-    context.strokeStyle = 'black';
-    context.lineWidth = 1;
+    let ctx = this.context;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.strokeStyle = 'black';
+    ctx.lineWidth = 5;
 
-    context.beginPath();
-    context.arc(this.pos.x, this.pos.y, this.size, 0, 2 * Math.PI);
-    context.stroke();
+    ctx.beginPath();
+    ctx.moveTo(this.pos.x, this.pos.y);
+    ctx.lineTo(this.pos.x + 20, this.pos.y + 20);
+    ctx.stroke();
   }
 
 }

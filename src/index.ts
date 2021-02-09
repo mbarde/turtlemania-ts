@@ -1,7 +1,4 @@
-import { Turtle } from './turtle';
+import { Game } from './game';
 
-let canvas = document.getElementById('canvas') as
-             HTMLCanvasElement;
-let context = canvas.getContext('2d');
-let turtle = new Turtle(context, {x: 50, y: 50});
-turtle.draw();
+let canvas = document.getElementById('canvas') as HTMLCanvasElement;
+let game = new Game(canvas);
