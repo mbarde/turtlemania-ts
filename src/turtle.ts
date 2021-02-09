@@ -16,21 +16,21 @@ export class Turtle {
     this.context = context;
     this.length = 10;
     this.pos = pos;
-    this.speed = 0.1;
+    this.speed = 0.6;
     this.width = 5;
   }
 
   update(ticks: number) {
     let dir: Vector2;
+
+    if (this.angle > 360) this.angle -= 360;
+    if (this.angle < 0) this.angle = 360 - this.angle;
+
     dir = this.baseDirection.clone();
     dir.rotate(this.angle);
     dir.normalize();
     dir.scale(this.speed * ticks * 0.1);
     this.pos.add(dir);
-
-    this.angle += 1;
-    if (this.angle > 360) this.angle -= 360;
-    if (this.angle < 0) this.angle = 360 - this.angle;
   }
 
   draw() {
@@ -58,6 +58,14 @@ export class Turtle {
     ctx.moveTo(pos0.x, pos0.y);
     ctx.lineTo(pos1.x, pos1.y);
     ctx.stroke();
+  }
+
+  turnLeft() {
+    this.angle += 5;
+  }
+
+  turnRight() {
+    this.angle -= 5;
   }
 
 }

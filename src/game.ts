@@ -7,15 +7,18 @@ export class Game {
   private context: CanvasRenderingContext2D;
   private fps: number;
   private interval: NodeJS.Timeout;
+  private isPaused: boolean;
   private lastUpdate: number;
   private turtle: Turtle;
 
   constructor(canvas: HTMLCanvasElement) {
     this.canvas = canvas;
     this.context = canvas.getContext('2d');
-    this.interval = setInterval(() => this.update(), 50);
+    this.isPaused = false;
     this.lastUpdate = Date.now();
     this.turtle = new Turtle(this.context, new Vector2(250, 250));
+
+    this.resume();
   }
 
   update() {
@@ -38,8 +41,33 @@ export class Game {
     );
   }
 
-  stop() {
+  pause() {
+    this.isPaused = true;
     clearInterval(this.interval);
+    console.log(this.interval);
+  }
+
+  resume() {
+    this.isPaused = false;
+    this.lastUpdate = Date.now();
+    this.interval = setInterval(() => this.update(), 50);
+  }
+
+  keyDown(keyCode: string) {
+    if (keyCode === 'Space') {
+      if (this.isPaused === true) this.resume()
+      else this.pause()
+    }
+    if (keyCode === 'ArrowLeft') {
+      this.turtle.turnLeft();
+    }
+    if (keyCode === 'ArrowRight') {
+      this.turtle.turnRight();
+    }
+  }
+
+  keyUp(keyCode: string) {
+
   }
 
   getFPS() {
