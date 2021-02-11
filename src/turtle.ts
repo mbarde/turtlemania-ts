@@ -1,3 +1,4 @@
+import { AnimatedProperty } from './animation';
 import { Vector2 } from './vector';
 
 export class Turtle {
@@ -5,21 +6,25 @@ export class Turtle {
   private angle: number;
   private baseDirection: Vector2;
   private context: CanvasRenderingContext2D;
-  private length: number;
+  private length: AnimatedProperty;
   private pos: Vector2;
   private speed: number;
   private steerSpeed: number;
-  private width: number;
+  private width: AnimatedProperty;
 
   constructor(context: CanvasRenderingContext2D, pos: Vector2) {
     this.angle = 45;
     this.baseDirection = new Vector2(0, 1);
     this.context = context;
-    this.length = 16;
+    this.length = new AnimatedProperty(16, 9999, 0.0);
+    this.length.setOscillation(false);
+    this.length.setValue(16);
     this.pos = pos;
     this.speed = 1.2;
     this.steerSpeed = 9;
-    this.width = 10;
+    this.width = new AnimatedProperty(0.0001, 10, 0.0);
+    this.width.setOscillation(false);
+    this.width.setValue(10);
   }
 
   update(ticks: number) {
@@ -29,6 +34,9 @@ export class Turtle {
     dir.normalize();
     dir.scale(this.speed * ticks * 0.1);
     this.pos.add(dir);
+
+    this.length.update();
+    this.width.update();
   }
 
   draw() {
@@ -40,12 +48,12 @@ export class Turtle {
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     ctx.strokeStyle = 'white';
-    ctx.lineWidth = this.width;
+    ctx.lineWidth = this.width.getValue();
 
     halfLengthVector = this.baseDirection.clone();
     halfLengthVector.rotate(this.angle);
     halfLengthVector.normalize();
-    halfLengthVector.scale(this.length/2);
+    halfLengthVector.scale(this.length.getValue()/2);
 
     pos0 = this.pos.clone();
     pos0.sub(halfLengthVector);
@@ -56,6 +64,11 @@ export class Turtle {
     ctx.moveTo(pos0.x, pos0.y);
     ctx.lineTo(pos1.x, pos1.y);
     ctx.stroke();
+  }
+
+  explode() {
+    this.length.setDelta(0.5);
+    this.width.setDelta(-0.1);
   }
 
   turnLeft() {
@@ -73,7 +86,7 @@ export class Turtle {
   }
 
   getWidth(): number {
-    return this.width;
+    return this.width.getValue();
   }
 
 }

@@ -9,6 +9,7 @@ export class Game {
   private posTextTimer: Vector2;
   private coins: Array<Coin>;
   private context: CanvasRenderingContext2D;
+  private finalTime: string;
   private fps: number;
   private interval: NodeJS.Timeout;
   private started: boolean;
@@ -21,6 +22,7 @@ export class Game {
     this.context = canvas.getContext('2d');
     this.started = false;
     this.lastTick = Date.now();
+    this.finalTime = '';
 
     let tx = Math.floor(this.canvas.width / 2);
     let ty = Math.floor(this.canvas.height / 2);
@@ -64,6 +66,10 @@ export class Game {
           () => { this.removeCoin(this.coins[i]); },
           1000
         );
+        if (this.coins.length === 1) {
+          this.finalTime = this.getPlayTime();
+          this.turtle.explode();
+        }
       }
     }
   }
@@ -100,6 +106,17 @@ export class Game {
       ctx.strokeText(this.getPlayTime(),
         this.posTextTimer.x, this.posTextTimer.y);
     }
+
+    if (this.finalTime.length > 0) {
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      ctx.strokeStyle = 'white';
+      ctx.font = '30px white Arial';
+      ctx.textAlign = 'center';
+      ctx.strokeText(`Time: ${this.finalTime}`,
+        this.posTextCenter.x, this.posTextCenter.y - 60);
+    }
   }
 
   removeCoin(coin: Coin) {
@@ -110,6 +127,9 @@ export class Game {
     }
     if (idx < this.coins.length) {
       this.coins.splice(idx, 1);
+      if (this.coins.length === 0) {
+        this.stop();
+      }
     }
   }
 
@@ -121,6 +141,9 @@ export class Game {
   }
 
   getPlayTime(): string {
+    if (this.finalTime.length > 0) {
+      return this.finalTime;
+    }
     return ((Date.now() - this.startTime) / 1000).toFixed(2);
   }
 
@@ -137,7 +160,9 @@ export class Game {
     this.started = true;
     this.lastTick = Date.now();
     this.startTime = this.lastTick;
+    this.finalTime = '';
     this.interval = setInterval(() => this.tick(), 1);
+    // setTimeout(() => { this.turtle.explode(); }, 500);
   }
 
   keyDown(keyCode: string) {

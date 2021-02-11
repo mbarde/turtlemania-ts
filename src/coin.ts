@@ -42,12 +42,9 @@ export class Coin {
       ctx.lineJoin = 'round';
       ctx.strokeStyle = 'white';
       ctx.lineWidth = this.lineWidth.getValue();
-      /* ctx.beginPath();
-      ctx.moveTo(this.pos.x, this.pos.y);
-      ctx.lineTo(this.pos.x, this.pos.y);
-      ctx.stroke(); */
       ctx.beginPath();
-      ctx.arc(this.pos.x, this.pos.y, this.radius.getValue(), 0, 2 * Math.PI);
+      ctx.arc(this.pos.x, this.pos.y,
+              this.radius.getValue(), 0, 2 * Math.PI);
       ctx.stroke();
   }
 
@@ -55,7 +52,7 @@ export class Coin {
     this.alive = false;
     this.lineWidth.setOscillation(false);
     this.lineWidth.setMin(0.0001);
-    this.lineWidth.setDelta(-0.01);
+    this.lineWidth.setDelta(-0.02);
     this.radius.setMax(99999);
     this.radius.setDelta(1);
   }
