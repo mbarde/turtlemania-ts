@@ -61,12 +61,13 @@ export class Game {
     for (let i = 0; i < this.coins.length; i++) {
       this.coins[i].update();
       this.coins[i].draw();
-      if (this.coins[i].touchedByTurtle(this.turtle)) {
+      if (this.coins[i].touchedByTurtle(this.turtle) === true) {
         setTimeout(
           () => { this.removeCoin(this.coins[i]); },
           1000
         );
-        if (this.coins.length === 1) {
+        this.turtle.boost();
+        if (this.coins.length <= 1) {
           this.finalTime = this.getPlayTime();
           this.turtle.explode();
         }
@@ -127,9 +128,9 @@ export class Game {
     }
     if (idx < this.coins.length) {
       this.coins.splice(idx, 1);
-      if (this.coins.length === 0) {
-        this.stop();
-      }
+    }
+    if (this.coins.length === 0) {
+      this.stop();
     }
   }
 

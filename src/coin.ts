@@ -18,7 +18,7 @@ export class Coin {
     this.radius = new AnimatedProperty(4, 6, 0.02);
 
     // random spawn within field size
-    // respecting leaving free this margin
+    // leaving free this margin
     let fieldMargin = 30;
     this.pos = new Vector2(
       Math.floor(
@@ -66,6 +66,7 @@ export class Coin {
       this.explode();
       return true;
     }
+    return false;
   }
 
 }

@@ -8,7 +8,7 @@ export class Turtle {
   private context: CanvasRenderingContext2D;
   private length: AnimatedProperty;
   private pos: Vector2;
-  private speed: number;
+  private speed: AnimatedProperty;
   private steerSpeed: number;
   private width: AnimatedProperty;
 
@@ -16,11 +16,13 @@ export class Turtle {
     this.angle = 45;
     this.baseDirection = new Vector2(0, 1);
     this.context = context;
-    this.length = new AnimatedProperty(16, 9999, 0.0);
+    this.length = new AnimatedProperty(16, 999, 0.0);
     this.length.setOscillation(false);
     this.length.setValue(16);
     this.pos = pos;
-    this.speed = 1.2;
+    this.speed = new AnimatedProperty(1.2, 2.0, 0.0);
+    this.speed.setOscillation(false);
+    this.speed.setValue(1.2);
     this.steerSpeed = 9;
     this.width = new AnimatedProperty(0.0001, 10, 0.0);
     this.width.setOscillation(false);
@@ -32,10 +34,11 @@ export class Turtle {
     dir = this.baseDirection.clone();
     dir.rotate(this.angle);
     dir.normalize();
-    dir.scale(this.speed * ticks * 0.1);
+    dir.scale(this.speed.getValue() * ticks * 0.1);
     this.pos.add(dir);
 
     this.length.update();
+    this.speed.update();
     this.width.update();
   }
 
@@ -66,7 +69,15 @@ export class Turtle {
     ctx.stroke();
   }
 
+  boost() {
+    this.width.setValue(5);
+    this.width.setDelta(0.1);
+    this.speed.setToMax();
+    this.speed.setDelta(-0.002);
+  }
+
   explode() {
+    this.length.setMax(999);
     this.length.setDelta(0.5);
     this.width.setDelta(-0.1);
   }

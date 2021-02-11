@@ -26,6 +26,14 @@ export class AnimatedProperty {
     if (this.value > this.max) this.value = this.max;
   }
 
+  setToMax() {
+    this.value = this.max;
+  }
+
+  setToMin() {
+    this.value = this.min;
+  }
+
   getValue(): number {
     return this.value;
   }
