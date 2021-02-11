@@ -15,11 +15,11 @@ export class Turtle {
     this.angle = 45;
     this.baseDirection = new Vector2(0, 1);
     this.context = context;
-    this.length = 10;
+    this.length = 16;
     this.pos = pos;
     this.speed = 0.8;
-    this.steerSpeed = 10;
-    this.width = 5;
+    this.steerSpeed = 9;
+    this.width = 10;
   }
 
   update(ticks: number) {
@@ -39,7 +39,7 @@ export class Turtle {
     ctx = this.context;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = 'black';
+    ctx.strokeStyle = 'white';
     ctx.lineWidth = this.width;
 
     halfLengthVector = this.baseDirection.clone();

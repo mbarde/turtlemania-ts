@@ -35,7 +35,6 @@ export class Game {
 
   update() {
     let now, ticks: number;
-    let hitCoins: Array<number>;
 
     now = Date.now();
     ticks = now - this.lastUpdate;
@@ -44,18 +43,30 @@ export class Game {
     this.clearCanvas();
     this.turtle.draw();
 
-    hitCoins = [];
     for (let i = 0; i < this.coins.length; i++) {
+      this.coins[i].update();
       this.coins[i].draw();
       if (this.coins[i].touchedByTurtle(this.turtle)) {
-        hitCoins.push(i);
+        setTimeout(
+          () => { this.removeCoin(this.coins[i]); },
+          1000
+        );
       }
     }
-    // remove all coins which were hit by turtle
-    hitCoins.forEach((index) => this.coins.splice(index, 1));
 
     this.fps = 1000 / ticks;
     this.lastUpdate = now;
+  }
+
+  removeCoin(coin: Coin) {
+    let idx: number;
+    idx = 0;
+    while (this.coins[idx] != coin) {
+      idx += 1;
+    }
+    if (idx < this.coins.length) {
+      this.coins.splice(idx, 1);
+    }
   }
 
   clearCanvas() {
@@ -68,7 +79,6 @@ export class Game {
   pause() {
     this.isPaused = true;
     clearInterval(this.interval);
-    console.log(this.interval);
   }
 
   resume() {
