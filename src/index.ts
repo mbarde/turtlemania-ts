@@ -4,7 +4,6 @@ let canvas = document.getElementById('canvas') as HTMLCanvasElement;
 let game = new Game(canvas);
 
 window.addEventListener('keydown', function(event){
-  console.log(event.code);
 	game.keyDown(event.code);
 }, false);
 

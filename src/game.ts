@@ -1,9 +1,11 @@
+import { Coin } from './coin';
 import { Turtle } from './turtle';
-import { Vector2 } from './vector'
+import { Vector2 } from './vector';
 
 export class Game {
 
   private canvas: HTMLCanvasElement;
+  private coins: Array<Coin>;
   private context: CanvasRenderingContext2D;
   private fps: number;
   private interval: NodeJS.Timeout;
@@ -16,19 +18,41 @@ export class Game {
     this.context = canvas.getContext('2d');
     this.isPaused = false;
     this.lastUpdate = Date.now();
-    this.turtle = new Turtle(this.context, new Vector2(250, 250));
+
+    let tx = Math.floor(this.canvas.width / 2);
+    let ty = Math.floor(this.canvas.height / 2);
+    this.turtle = new Turtle(this.context, new Vector2(tx, ty));
+
+    let fieldSize = new Vector2(this.canvas.width, this.canvas.height);
+    this.coins = [
+      new Coin(this.context, fieldSize),
+      new Coin(this.context, fieldSize),
+      new Coin(this.context, fieldSize),
+    ];
 
     this.resume();
   }
 
   update() {
     let now, ticks: number;
+    let hitCoins: Array<number>;
+
     now = Date.now();
     ticks = now - this.lastUpdate;
 
     this.turtle.update(ticks);
     this.clearCanvas();
     this.turtle.draw();
+
+    hitCoins = [];
+    for (let i = 0; i < this.coins.length; i++) {
+      this.coins[i].draw();
+      if (this.coins[i].touchedByTurtle(this.turtle)) {
+        hitCoins.push(i);
+      }
+    }
+    // remove all coins which were hit by turtle
+    hitCoins.forEach((index) => this.coins.splice(index, 1));
 
     this.fps = 1000 / ticks;
     this.lastUpdate = now;
@@ -50,7 +74,7 @@ export class Game {
   resume() {
     this.isPaused = false;
     this.lastUpdate = Date.now();
-    this.interval = setInterval(() => this.update(), 50);
+    this.interval = setInterval(() => this.update(), 1);
   }
 
   keyDown(keyCode: string) {
@@ -70,7 +94,7 @@ export class Game {
 
   }
 
-  getFPS() {
+  getFPS(): number {
     return this.fps;
   }
 

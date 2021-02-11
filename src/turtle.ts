@@ -8,6 +8,7 @@ export class Turtle {
   private length: number;
   private pos: Vector2;
   private speed: number;
+  private steerSpeed: number;
   private width: number;
 
   constructor(context: CanvasRenderingContext2D, pos: Vector2) {
@@ -16,16 +17,13 @@ export class Turtle {
     this.context = context;
     this.length = 10;
     this.pos = pos;
-    this.speed = 0.6;
+    this.speed = 0.8;
+    this.steerSpeed = 10;
     this.width = 5;
   }
 
   update(ticks: number) {
     let dir: Vector2;
-
-    if (this.angle > 360) this.angle -= 360;
-    if (this.angle < 0) this.angle = 360 - this.angle;
-
     dir = this.baseDirection.clone();
     dir.rotate(this.angle);
     dir.normalize();
@@ -61,11 +59,21 @@ export class Turtle {
   }
 
   turnLeft() {
-    this.angle += 5;
+    this.angle += this.steerSpeed;
+    if (this.angle > 360) this.angle -= 360;
   }
 
   turnRight() {
-    this.angle -= 5;
+    this.angle -= this.steerSpeed;
+    if (this.angle < 0) this.angle = 360 + this.angle;
+  }
+
+  getPos(): Vector2 {
+    return this.pos;
+  }
+
+  getWidth(): number {
+    return this.width;
   }
 
 }

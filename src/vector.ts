@@ -35,13 +35,23 @@ export class Vector2 {
 
   normalize() {
     let mag: number;
-    mag = Math.sqrt((this.x * this.x) + (this.y * this.y));
+    mag = this.magnitude();
     if (mag === 0) return;
     this.x = this.x / mag;
     this.y = this.y / mag;
   }
 
-  clone() {
+  magnitude(): number {
+    return Math.sqrt((this.x * this.x) + (this.y * this.y));
+  }
+
+  distanceTo(vec: Vector2): number {
+    let hVec = this.clone();
+    hVec.sub(vec);
+    return hVec.magnitude();
+  }
+
+  clone(): Vector2 {
     return new Vector2(this.x, this.y);
   }
 }
