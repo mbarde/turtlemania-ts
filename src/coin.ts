@@ -22,10 +22,10 @@ export class Coin {
     let fieldMargin = 30;
     this.pos = new Vector2(
       Math.floor(
-        Math.random() * fieldSize.x - (2*fieldMargin)
+        Math.random() * (fieldSize.x - (2*fieldMargin))
       ) + fieldMargin,
       Math.floor(
-        Math.random() * fieldSize.y - (2*fieldMargin)
+        Math.random() * (fieldSize.y - (2*fieldMargin))
       ) + fieldMargin
     );
   }
