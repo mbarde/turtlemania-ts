@@ -17,7 +17,7 @@ export class Turtle {
     this.context = context;
     this.length = 16;
     this.pos = pos;
-    this.speed = 0.8;
+    this.speed = 1.2;
     this.steerSpeed = 9;
     this.width = 10;
   }
