@@ -43,7 +43,7 @@ export class Game {
     this.coins = [
       new Coin(this.context, fieldSize),
       new Coin(this.context, fieldSize),
-      new Coin(this.context, fieldSize),
+      new Coin(this.context, fieldSize)
     ];
   }
 
@@ -152,13 +152,12 @@ export class Game {
   stop() {
     this.started = false;
     clearInterval(this.interval);
-
-    this.initEnitities();
     this.clearCanvas();
     this.drawText();
   }
 
   start() {
+    this.initEnitities();
     this.started = true;
     this.lastTick = Date.now();
     this.startTime = this.lastTick;
