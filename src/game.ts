@@ -37,8 +37,9 @@ export class Game {
   }
 
   initEnitities() {
-    this.turtle = new Turtle(this.context, this.posTextCenter.clone());
     let fieldSize = new Vector2(this.canvas.width, this.canvas.height);
+    this.turtle = new Turtle(
+      this.context, this.posTextCenter.clone(), fieldSize);
     this.coins = [
       new Coin(this.context, fieldSize),
       new Coin(this.context, fieldSize),
@@ -163,7 +164,6 @@ export class Game {
     this.startTime = this.lastTick;
     this.finalTime = '';
     this.interval = setInterval(() => this.tick(), 1);
-    // setTimeout(() => { this.turtle.explode(); }, 500);
   }
 
   keyDown(keyCode: string) {
