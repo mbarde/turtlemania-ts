@@ -6,6 +6,7 @@ export class Coin {
 
   private alive: boolean;
   private context: CanvasRenderingContext2D;
+  private hidden: boolean;
   private lineWidth: AnimatedProperty;
   private pos: Vector2;
   private radius: AnimatedProperty;
@@ -14,6 +15,7 @@ export class Coin {
   constructor(context: CanvasRenderingContext2D, fieldSize: Vector2) {
     this.alive = true;
     this.context = context;
+    this.hidden = false;
     this.lineWidth = new AnimatedProperty(1, 3, 0.01);
     this.radius = new AnimatedProperty(4, 6, 0.02);
 
@@ -64,9 +66,14 @@ export class Coin {
     h = Math.floor(this.radius.getValue()/2) + Math.floor(turtle.getWidth());
     if (distance <= h) {
       this.explode();
+      setTimeout(() => { this.hidden = true; }, 1000);
       return true;
     }
     return false;
+  }
+
+  isHidden(): boolean {
+    return this.hidden;
   }
 
 }

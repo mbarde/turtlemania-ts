@@ -8,6 +8,7 @@ export class Game {
   private posTextCenter: Vector2;
   private posTextTimer: Vector2;
   private coins: Array<Coin>;
+  private coinsAlive: number;
   private context: CanvasRenderingContext2D;
   private finalTime: string;
   private fps: number;
@@ -45,6 +46,7 @@ export class Game {
       new Coin(this.context, fieldSize),
       new Coin(this.context, fieldSize)
     ];
+    this.coinsAlive = this.coins.length;
   }
 
   tick() {
@@ -59,28 +61,27 @@ export class Game {
 
   update(ticks: number) {
     this.turtle.update(ticks);
-    for (let i = 0; i < this.coins.length; i++) {
-      this.coins[i].update();
-      this.coins[i].draw();
-      if (this.coins[i].touchedByTurtle(this.turtle) === true) {
-        setTimeout(
-          () => { this.removeCoin(this.coins[i]); },
-          1000
-        );
-        this.turtle.boost();
-        if (this.coins.length <= 1) {
-          this.finalTime = this.getPlayTime();
-          this.turtle.explode();
+    this.coins.forEach((coin) => {
+      if (coin.isHidden() === false) {
+        coin.update();
+        if (coin.touchedByTurtle(this.turtle) === true) {
+          this.coinsAlive -= 1;
+          this.turtle.boost();
+          if (this.coinsAlive === 0) {
+            this.finalTime = this.getPlayTime();
+            this.turtle.explode();
+            setTimeout(() => { this.stop(); }, 1000);
+          }
         }
       }
-    }
+    });
   }
 
   draw() {
     this.clearCanvas();
     this.turtle.draw();
     this.coins.forEach((coin) => {
-      coin.draw();
+      if (coin.isHidden() === false) coin.draw();
     });
     this.drawText();
   }
@@ -118,20 +119,6 @@ export class Game {
       ctx.textAlign = 'center';
       ctx.strokeText(`Time: ${this.finalTime}`,
         this.posTextCenter.x, this.posTextCenter.y - 60);
-    }
-  }
-
-  removeCoin(coin: Coin) {
-    let idx: number;
-    idx = 0;
-    while (this.coins[idx] != coin) {
-      idx += 1;
-    }
-    if (idx < this.coins.length) {
-      this.coins.splice(idx, 1);
-    }
-    if (this.coins.length === 0) {
-      this.stop();
     }
   }
 
