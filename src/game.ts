@@ -1,25 +1,28 @@
 import { Coin } from './coin';
+import { Config } from './config';
 import { Turtle } from './turtle';
 import { Vector2 } from './vector';
 
 export class Game {
 
   private canvas: HTMLCanvasElement;
-  private posTextCenter: Vector2;
-  private posTextTimer: Vector2;
   private coins: Array<Coin>;
   private coinsAlive: number;
+  private config: Config;
   private context: CanvasRenderingContext2D;
   private finalTime: string;
   private fps: number;
   private interval: NodeJS.Timeout;
-  private started: boolean;
   private lastTick: number;
-  private turtle: Turtle;
+  private posTextCenter: Vector2;
+  private posTextTimer: Vector2;
+  private started: boolean;
   private startTime: number;
+  private turtle: Turtle;
 
-  constructor(canvas: HTMLCanvasElement) {
+  constructor(canvas: HTMLCanvasElement, config: Config) {
     this.canvas = canvas;
+    this.config = config;
     this.context = canvas.getContext('2d');
     this.started = false;
     this.lastTick = Date.now();
@@ -40,11 +43,13 @@ export class Game {
   initEnitities() {
     let fieldSize = new Vector2(this.canvas.width, this.canvas.height);
     this.turtle = new Turtle(
-      this.context, this.posTextCenter.clone(), fieldSize);
+      this.context, this.posTextCenter.clone(),
+      fieldSize, this.config.turtleColor
+    );
     this.coins = [
-      new Coin(this.context, fieldSize),
-      new Coin(this.context, fieldSize),
-      new Coin(this.context, fieldSize)
+      new Coin(this.context, fieldSize, this.config.coinColor),
+      new Coin(this.context, fieldSize, this.config.coinColor),
+      new Coin(this.context, fieldSize, this.config.coinColor)
     ];
     this.coinsAlive = this.coins.length;
   }
@@ -94,7 +99,7 @@ export class Game {
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = 'white';
+      ctx.strokeStyle = this.config.fontColor;
       ctx.font = '30px white Arial';
       ctx.textAlign = 'center';
       ctx.strokeText('Press [SPACE]',
@@ -103,7 +108,7 @@ export class Game {
       ctx.lineWidth = 1;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = 'white';
+      ctx.strokeStyle = this.config.fontColor;
       ctx.font = '15px white Arial';
       ctx.textAlign = 'center';
       ctx.strokeText(this.getPlayTime(),

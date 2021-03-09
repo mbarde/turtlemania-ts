@@ -5,6 +5,7 @@ export class Turtle {
 
   private angle: number;
   private baseDirection: Vector2;
+  private color: string;
   private context: CanvasRenderingContext2D;
   private fieldSize: Vector2;
   private length: AnimatedProperty;
@@ -14,9 +15,10 @@ export class Turtle {
   private width: AnimatedProperty;
 
   constructor(context: CanvasRenderingContext2D, pos: Vector2,
-              fieldSize: Vector2) {
+              fieldSize: Vector2, color: string) {
     this.angle = 45;
     this.baseDirection = new Vector2(0, 1);
+    this.color = color;
     this.context = context;
     this.fieldSize = fieldSize;
     this.length = new AnimatedProperty(16, 999, 0.0);
@@ -61,7 +63,7 @@ export class Turtle {
     ctx = this.context;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = this.color;
     ctx.lineWidth = this.width.getValue();
 
     halfLength = this.length.getValue() / 2;

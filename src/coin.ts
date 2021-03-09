@@ -5,6 +5,7 @@ import { Vector2 } from './vector';
 export class Coin {
 
   private alive: boolean;
+  private color: string;
   private context: CanvasRenderingContext2D;
   private hidden: boolean;
   private lineWidth: AnimatedProperty;
@@ -12,8 +13,10 @@ export class Coin {
   private radius: AnimatedProperty;
 
 
-  constructor(context: CanvasRenderingContext2D, fieldSize: Vector2) {
+  constructor(context: CanvasRenderingContext2D, fieldSize: Vector2,
+              color: string) {
     this.alive = true;
+    this.color = color;
     this.context = context;
     this.hidden = false;
     this.lineWidth = new AnimatedProperty(1, 3, 0.01);
@@ -42,7 +45,7 @@ export class Coin {
       ctx = this.context;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = 'white';
+      ctx.strokeStyle = this.color;
       ctx.lineWidth = this.lineWidth.getValue();
       ctx.beginPath();
       ctx.arc(this.pos.x, this.pos.y,

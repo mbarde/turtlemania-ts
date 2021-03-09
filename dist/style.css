@@ -6,8 +6,7 @@ h1, p {
   text-align: center;
 }
 
-
-#canvas {
+#turtlemania-canvas {
   background-color: #436CB9;
   display: block;
   margin: auto;
