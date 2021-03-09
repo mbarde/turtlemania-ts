@@ -6,7 +6,7 @@ export class AnimatedProperty {
   private value: number;
   private oscillation: boolean;
 
-  constructor( min: number, max: number, delta: number) {
+  constructor(min: number, max: number, delta: number) {
     this.max = max;
     this.min = min;
     this.delta = delta;

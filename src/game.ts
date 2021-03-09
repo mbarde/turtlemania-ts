@@ -100,7 +100,7 @@ export class Game {
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.strokeStyle = this.config.fontColor;
-      ctx.font = '30px white Arial';
+      ctx.font = `30px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
       ctx.strokeText('Press [SPACE]',
         this.posTextCenter.x, this.posTextCenter.y);
@@ -109,7 +109,7 @@ export class Game {
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
       ctx.strokeStyle = this.config.fontColor;
-      ctx.font = '15px white Arial';
+      ctx.font = `15px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
       ctx.strokeText(this.getPlayTime(),
         this.posTextTimer.x, this.posTextTimer.y);
@@ -119,8 +119,8 @@ export class Game {
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = 'white';
-      ctx.font = '30px white Arial';
+      ctx.strokeStyle = this.config.fontColor;
+      ctx.font = `30px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
       ctx.strokeText(`Time: ${this.finalTime}`,
         this.posTextCenter.x, this.posTextCenter.y - 60);
@@ -159,10 +159,10 @@ export class Game {
 
   keyDown(keyCode: string) {
     if (keyCode === 'ArrowLeft') {
-      this.turtle.turnLeft();
+      this.turtle.turnStartLeft();
     }
     if (keyCode === 'ArrowRight') {
-      this.turtle.turnRight();
+      this.turtle.turnStartRight();
     }
     if (keyCode === 'KeyR') {
       this.stop();
@@ -172,6 +172,12 @@ export class Game {
   keyUp(keyCode: string) {
     if (keyCode === 'Space') {
       if (this.started === false) this.start();
+    }
+    if (keyCode === 'ArrowLeft') {
+      this.turtle.turnStop();
+    }
+    if (keyCode === 'ArrowRight') {
+      this.turtle.turnStop();
     }
   }
 
