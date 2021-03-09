@@ -102,7 +102,7 @@ export class Game {
       ctx.strokeStyle = this.config.fontColor;
       ctx.font = `30px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
-      ctx.strokeText('Press [SPACE]',
+      ctx.strokeText('Press SPACE or touch screen',
         this.posTextCenter.x, this.posTextCenter.y);
     } else {
       ctx.lineWidth = 1;
@@ -181,8 +181,28 @@ export class Game {
     }
   }
 
+  touchStart(event: TouchEvent) {
+    if (event.touches[0].clientX < this.posTextCenter.x) {
+      this.turtle.turnStartLeft();
+    } else {
+      this.turtle.turnStartRight();
+    }
+  }
+
+  touchEnd() {
+    if (this.started === false) {
+      this.start();
+      return;
+    }
+    this.turtle.turnStop();
+  }
+
   getFPS(): number {
     return this.fps;
+  }
+
+  getStarted(): boolean {
+    return this.started;
   }
 
 }

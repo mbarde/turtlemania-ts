@@ -9,16 +9,14 @@ function getAttributeSafe(el: HTMLOrSVGScriptElement, attrName: string, defaultV
 }
 
 let clr = document.currentScript.getAttribute('clr');
-let coinColor, fontColor, frameColor, turtleColor: string;
+let coinColor, fontColor, turtleColor: string;
 if (clr === null) {
 	coinColor = getAttributeSafe(document.currentScript, 'clr-coins', 'white');
 	fontColor = getAttributeSafe(document.currentScript, 'clr-font', 'white');
-	frameColor = getAttributeSafe(document.currentScript, 'clr-frame', 'white');
 	turtleColor = getAttributeSafe(document.currentScript, 'clr-turtle', 'white');
 } else {
 	coinColor = clr;
 	fontColor = clr;
-	frameColor = clr;
 	turtleColor = clr;
 }
 
@@ -27,33 +25,50 @@ let canvas: HTMLCanvasElement;
 let canvasId: string;
 canvasId = 'turtlemania-canvas';
 canvas = document.getElementById(canvasId) as HTMLCanvasElement;
+canvas.width = window.screen.width / 2;
+canvas.height = window.screen.height / 2;
 
-if (canvas === null) {
-	// if no canvas was found, create one :)
-	canvas = document.createElement('canvas');
-	canvas.id = canvasId;
-	canvas.width = 750;
-	canvas.height = 600;
-	canvas.style.borderColor = frameColor;
-	canvas.style.borderStyle = 'solid';
-	canvas.style.borderWidth = '1px';
-	canvas.style.display = 'block';
-	canvas.style.margin = 'auto';
+let gameConfig = new Config(coinColor, fontColor, turtleColor);
+let game = new Game(canvas, gameConfig)
 
-	let body: HTMLBodyElement;
-	body = document.getElementsByTagName('body')[0];
-	body.appendChild(canvas);
-}
-
-// init game
-let config = new Config(coinColor, fontColor, turtleColor);
-let game = new Game(canvas, config);
-
-// set event handlers for input
-window.addEventListener('keydown', function(event){
+// input event handlers
+window.addEventListener('keydown', (event) => {
+	if (event.code == 'KeyF') {
+		enterFullscreen();
+		return;
+	}
 	game.keyDown(event.code);
 }, false);
 
-window.addEventListener('keyup', function(event){
+window.addEventListener('keyup', (event) => {
 	game.keyUp(event.code);
 }, false);
+
+canvas.addEventListener('touchstart', (event) => {
+	game.touchStart(event);
+	return false;
+}, false);
+
+canvas.addEventListener('touchend', () => {
+	game.touchEnd();
+	return false;
+}, false);
+
+let btnFullscreen = document.getElementById('btn-fullscreen');
+if (btnFullscreen !== null) {
+	btnFullscreen.addEventListener('click', enterFullscreen);
+}
+
+function enterFullscreenForElement(element: any) {
+	if(element.requestFullscreen) {
+		element.requestFullscreen();
+	} else if(element.msRequestFullscreen) {
+		element.msRequestFullscreen();
+	} else if(element.webkitRequestFullscreen) {
+		element.webkitRequestFullscreen();
+	}
+}
+
+function enterFullscreen() {
+	enterFullscreenForElement(canvas);
+}
