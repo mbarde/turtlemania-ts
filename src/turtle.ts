@@ -4,6 +4,7 @@ import { Vector2 } from './vector';
 export class Turtle {
 
   private angle: number;
+  private angleDelta: AnimatedProperty;
   private baseDirection: Vector2;
   private color: string;
   private context: CanvasRenderingContext2D;
@@ -12,11 +13,15 @@ export class Turtle {
   private pos: Vector2;
   private speed: AnimatedProperty;
   private steerSpeed: number;
+  private steerSpeedDelta: number;
+  private steerSpeedMax: number;
   private width: AnimatedProperty;
 
   constructor(context: CanvasRenderingContext2D, pos: Vector2,
               fieldSize: Vector2, color: string) {
     this.angle = 45;
+    this.angleDelta = new AnimatedProperty(0, 0, 0);
+    this.angleDelta.setOscillation(false);
     this.baseDirection = new Vector2(0, 1);
     this.color = color;
     this.context = context;
@@ -28,7 +33,9 @@ export class Turtle {
     this.speed = new AnimatedProperty(1.2, 2.0, 0.0);
     this.speed.setOscillation(false);
     this.speed.setValue(1.2);
-    this.steerSpeed = 9;
+    this.steerSpeed = 0.9;        // how fast does the turtle turn?
+    this.steerSpeedDelta = 0.001; // how fast does the turn speed increase when holding a steer button?
+    this.steerSpeedMax = 3;       // max allowed turn speed
     this.width = new AnimatedProperty(0.0001, 10, 0.0);
     this.width.setOscillation(false);
     this.width.setValue(10);
@@ -36,6 +43,13 @@ export class Turtle {
 
   update(ticks: number) {
     let dir: Vector2;
+
+    if (this.angleDelta.getValue() != 0) {
+      this.angle += this.angleDelta.getValue();
+      if (this.angle > 360) this.angle -= 360;
+      if (this.angle < 0) this.angle = 360 + this.angle;
+    }
+
     dir = this.baseDirection.clone();
     dir.rotate(this.angle);
     dir.normalize();
@@ -49,6 +63,7 @@ export class Turtle {
     if (this.pos.y < 0) this.pos.y = this.fieldSize.y;
     if (this.pos.y > this.fieldSize.y) this.pos.y = 0;
 
+    this.angleDelta.update();
     this.length.update();
     this.speed.update();
     this.width.update();
@@ -116,14 +131,25 @@ export class Turtle {
     this.width.setDelta(-0.1);
   }
 
-  turnLeft() {
-    this.angle += this.steerSpeed;
-    if (this.angle > 360) this.angle -= 360;
+  turnStartLeft() {
+    if (this.angleDelta.getValue() != 0) return;
+    this.angleDelta.setDelta(this.steerSpeedDelta);
+    this.angleDelta.setValue(this.steerSpeed);
+    this.angleDelta.setMax(this.steerSpeedMax);
   }
 
-  turnRight() {
-    this.angle -= this.steerSpeed;
-    if (this.angle < 0) this.angle = 360 + this.angle;
+  turnStartRight() {
+    if (this.angleDelta.getValue() != 0) return;
+    this.angleDelta.setDelta(-this.steerSpeedDelta);
+    this.angleDelta.setValue(-this.steerSpeed);
+    this.angleDelta.setMin(-this.steerSpeedMax);
+  }
+
+  turnStop() {
+    this.angleDelta.setDelta(0);
+    this.angleDelta.setValue(0);
+    this.angleDelta.setMin(0);
+    this.angleDelta.setMax(0);
   }
 
   getPos(): Vector2 {
