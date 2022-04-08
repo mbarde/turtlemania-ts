@@ -12,9 +12,11 @@ export class Game {
   private context: CanvasRenderingContext2D;
   private finalTime: string;
   private fps: number;
+  private inputsCount: number;
   private interval: NodeJS.Timeout;
   private lastTick: number;
   private posTextCenter: Vector2;
+  private posTextInputsCounter: Vector2;
   private posTextTimer: Vector2;
   private started: boolean;
   private startTime: number;
@@ -27,12 +29,15 @@ export class Game {
     this.started = false;
     this.lastTick = Date.now();
     this.finalTime = '';
+    this.inputsCount = 0;
 
     let tx = Math.floor(this.canvas.width / 2);
     let ty = Math.floor(this.canvas.height / 2);
     this.posTextCenter = new Vector2(tx, ty);
     this.posTextTimer = new Vector2(
       this.canvas.width - 30, this.canvas.height - 30);
+    this.posTextInputsCounter = new Vector2(
+      this.canvas.width - 30, 30);
 
     this.initEnitities();
 
@@ -113,6 +118,9 @@ export class Game {
       ctx.textAlign = 'center';
       ctx.strokeText(this.getPlayTime(),
         this.posTextTimer.x, this.posTextTimer.y);
+      ctx.strokeText(this.inputsCount.toString(),
+        this.posTextInputsCounter.x,
+        this.posTextInputsCounter.y);
     }
 
     if (this.finalTime.length > 0) {
@@ -122,6 +130,8 @@ export class Game {
       ctx.strokeStyle = this.config.fontColor;
       ctx.font = `30px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
+      ctx.strokeText(`Inputs: ${this.inputsCount}`,
+        this.posTextCenter.x, this.posTextCenter.y - 110);
       ctx.strokeText(`Time: ${this.finalTime}`,
         this.posTextCenter.x, this.posTextCenter.y - 60);
     }
@@ -155,13 +165,16 @@ export class Game {
     this.startTime = this.lastTick;
     this.finalTime = '';
     this.interval = setInterval(() => this.tick(), 1);
+    this.inputsCount = 0;
   }
 
   keyDown(keyCode: string) {
     if (keyCode === 'ArrowLeft') {
+      this.inputsCount++;
       this.turtle.turnStartLeft();
     }
     if (keyCode === 'ArrowRight') {
+      this.inputsCount++;
       this.turtle.turnStartRight();
     }
     if (keyCode === 'KeyR') {
@@ -183,8 +196,10 @@ export class Game {
 
   touchStart(event: TouchEvent) {
     if (event.touches[0].clientX < this.posTextCenter.x) {
+      this.inputsCount++;
       this.turtle.turnStartLeft();
     } else {
+      this.inputsCount++;
       this.turtle.turnStartRight();
     }
   }
