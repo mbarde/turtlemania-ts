@@ -104,21 +104,21 @@ export class Game {
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = this.config.fontColor;
+      ctx.fillStyle = this.config.fontColor;
       ctx.font = `30px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
-      ctx.strokeText('Press SPACE or touch screen',
+      ctx.fillText('Press SPACE or touch screen',
         this.posTextCenter.x, this.posTextCenter.y);
     } else {
       ctx.lineWidth = 1;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = this.config.fontColor;
+      ctx.fillStyle = this.config.fontColor;
       ctx.font = `15px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
-      ctx.strokeText(this.getPlayTime(),
+      ctx.fillText(this.getPlayTime(),
         this.posTextTimer.x, this.posTextTimer.y);
-      ctx.strokeText(this.inputsCount.toString(),
+      ctx.fillText(this.inputsCount.toString(),
         this.posTextInputsCounter.x,
         this.posTextInputsCounter.y);
     }
@@ -127,12 +127,12 @@ export class Game {
       ctx.lineWidth = 3;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = this.config.fontColor;
+      ctx.fillStyle = this.config.fontColor;
       ctx.font = `30px ${this.config.fontColor} Arial`;
       ctx.textAlign = 'center';
-      ctx.strokeText(`Inputs: ${this.inputsCount}`,
+      ctx.fillText(`Inputs: ${this.inputsCount}`,
         this.posTextCenter.x, this.posTextCenter.y - 110);
-      ctx.strokeText(`Time: ${this.finalTime}`,
+      ctx.fillText(`Time: ${this.finalTime}`,
         this.posTextCenter.x, this.posTextCenter.y - 60);
     }
   }
