@@ -42,6 +42,8 @@ button:hover {
   border: 2px solid white;
   display: block;
   margin: auto;
+  width: 100%;
+  max-width: 768px;
 }
 
 #turtlemania-canvas:fullscreen {
