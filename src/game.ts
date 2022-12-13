@@ -170,11 +170,11 @@ export class Game {
 
   keyDown(keyCode: string) {
     if (keyCode === 'ArrowLeft') {
-      this.inputsCount++;
+      if (this.finalTime.length === 0) this.inputsCount++;
       this.turtle.turnStartLeft();
     }
     if (keyCode === 'ArrowRight') {
-      this.inputsCount++;
+      if (this.finalTime.length === 0) this.inputsCount++;
       this.turtle.turnStartRight();
     }
     if (keyCode === 'KeyR') {
