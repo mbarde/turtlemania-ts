@@ -33,8 +33,10 @@ let game = new Game(canvas, gameConfig)
 
 // input event handlers
 window.addEventListener('keydown', (event) => {
-	event.preventDefault();
-	event.stopPropagation();
+	if (event.code == 'Space' || event.code.startsWith('Arrow')) {
+		// avoid scrolling when playing embedded
+		event.preventDefault();
+	}
 	if (event.code == 'KeyF') {
 		enterFullscreen();
 		return;
@@ -43,8 +45,6 @@ window.addEventListener('keydown', (event) => {
 }, false);
 
 window.addEventListener('keyup', (event) => {
-	event.preventDefault();
-	event.stopPropagation();
 	game.keyUp(event.code);
 }, false);
 
