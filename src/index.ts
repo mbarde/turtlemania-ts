@@ -33,23 +33,31 @@ let game = new Game(canvas, gameConfig)
 
 // input event handlers
 window.addEventListener('keydown', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
 	if (event.code == 'KeyF') {
 		enterFullscreen();
 		return;
 	}
-	game.keyDown(event.code);
+	game.keyDown(event.code);	
 }, false);
 
 window.addEventListener('keyup', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
 	game.keyUp(event.code);
 }, false);
 
 canvas.addEventListener('touchstart', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
 	game.touchStart(event);
 	return false;
 }, false);
 
-canvas.addEventListener('touchend', () => {
+canvas.addEventListener('touchend', (event) => {
+	event.preventDefault();
+	event.stopPropagation();
 	game.touchEnd();
 	return false;
 }, false);
