@@ -1,11 +1,12 @@
 import { AnimatedProperty } from './animation';
+import { Rainbow } from './rainbow';
 import { Turtle } from './turtle';
 import { Vector2 } from './vector';
 
 export class Coin {
 
   private alive: boolean;
-  private color: string;
+  private color: Rainbow;
   private context: CanvasRenderingContext2D;
   private hidden: boolean;
   private lineWidth: AnimatedProperty;
@@ -13,10 +14,9 @@ export class Coin {
   private radius: AnimatedProperty;
 
 
-  constructor(context: CanvasRenderingContext2D, fieldSize: Vector2,
-              color: string) {
+  constructor(context: CanvasRenderingContext2D, fieldSize: Vector2) {
     this.alive = true;
-    this.color = color;
+    this.color = new Rainbow(0);
     this.context = context;
     this.hidden = false;
     this.lineWidth = new AnimatedProperty(1, 3, 0.01);
@@ -36,6 +36,7 @@ export class Coin {
   }
 
   update() {
+    this.color.update();
     this.lineWidth.update();
     this.radius.update();
   }
@@ -45,7 +46,7 @@ export class Coin {
       ctx = this.context;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
-      ctx.strokeStyle = this.color;
+      ctx.strokeStyle = this.color.getColor();
       ctx.lineWidth = this.lineWidth.getValue();
       ctx.beginPath();
       ctx.arc(this.pos.x, this.pos.y,

@@ -49,12 +49,12 @@ export class Game {
     let fieldSize = new Vector2(this.canvas.width, this.canvas.height);
     this.turtle = new Turtle(
       this.context, this.posTextCenter.clone(),
-      fieldSize, this.config.turtleColor
+      fieldSize,
     );
     this.coins = [
-      new Coin(this.context, fieldSize, this.config.coinColor),
-      new Coin(this.context, fieldSize, this.config.coinColor),
-      new Coin(this.context, fieldSize, this.config.coinColor)
+      new Coin(this.context, fieldSize),
+      new Coin(this.context, fieldSize),
+      new Coin(this.context, fieldSize),
     ];
     this.coinsAlive = this.coins.length;
   }

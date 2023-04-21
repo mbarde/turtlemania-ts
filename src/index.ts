@@ -9,15 +9,11 @@ function getAttributeSafe(el: HTMLOrSVGScriptElement, attrName: string, defaultV
 }
 
 let clr = document.currentScript.getAttribute('clr');
-let coinColor, fontColor, turtleColor: string;
+let fontColor: string;
 if (clr === null) {
-	coinColor = getAttributeSafe(document.currentScript, 'clr-coins', 'white');
-	fontColor = getAttributeSafe(document.currentScript, 'clr-font', 'white');
-	turtleColor = getAttributeSafe(document.currentScript, 'clr-turtle', 'white');
+	fontColor = getAttributeSafe(document.currentScript, 'clr-font', 'black');
 } else {
-	coinColor = clr;
 	fontColor = clr;
-	turtleColor = clr;
 }
 
 // get canvas and set dimensions
@@ -28,7 +24,7 @@ canvas = document.getElementById(canvasId) as HTMLCanvasElement;
 canvas.height = canvas.clientHeight;
 canvas.width = canvas.clientWidth;
 
-let gameConfig = new Config(coinColor, fontColor, turtleColor);
+let gameConfig = new Config(fontColor);
 let game = new Game(canvas, gameConfig)
 
 // input event handlers

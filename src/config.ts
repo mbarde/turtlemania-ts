@@ -4,10 +4,8 @@ export class Config {
   public fontColor: string;
   public turtleColor: string;
 
-  constructor(coinColor: string, fontColor: string, turtleColor: string) {
-    this.coinColor = coinColor;
+  constructor(fontColor: string) {
     this.fontColor = fontColor;
-    this.turtleColor = turtleColor;
   }
 
 }

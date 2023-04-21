@@ -58,4 +58,9 @@ export class AnimatedProperty {
     this.oscillation = oscillation;
   }
 
+  randomize() {
+    const offset = Math.floor(Math.random() * this.max - this.min);
+    this.value = this.min + offset;
+  }
+
 }

@@ -1,4 +1,5 @@
 import { AnimatedProperty } from './animation';
+import { Rainbow } from './rainbow';
 import { Vector2 } from './vector';
 
 export class Turtle {
@@ -6,7 +7,7 @@ export class Turtle {
   private angle: number;
   private angleDelta: AnimatedProperty;
   private baseDirection: Vector2;
-  private color: string;
+  private color: Rainbow;
   private context: CanvasRenderingContext2D;
   private fieldSize: Vector2;
   private length: AnimatedProperty;
@@ -18,12 +19,12 @@ export class Turtle {
   private width: AnimatedProperty;
 
   constructor(context: CanvasRenderingContext2D, pos: Vector2,
-              fieldSize: Vector2, color: string) {
+              fieldSize: Vector2) {
     this.angle = 45;
     this.angleDelta = new AnimatedProperty(0, 0, 0);
     this.angleDelta.setOscillation(false);
     this.baseDirection = new Vector2(0, 1);
-    this.color = color;
+    this.color = new Rainbow(0.4);
     this.context = context;
     this.fieldSize = fieldSize;
     this.length = new AnimatedProperty(16, 999, 0.0);
@@ -64,6 +65,7 @@ export class Turtle {
     if (this.pos.y > this.fieldSize.y) this.pos.y = 0;
 
     this.angleDelta.update();
+    this.color.update();
     this.length.update();
     this.speed.update();
     this.width.update();
@@ -78,7 +80,7 @@ export class Turtle {
     ctx = this.context;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
-    ctx.strokeStyle = this.color;
+    ctx.strokeStyle = this.color.getColor();
     ctx.lineWidth = this.width.getValue();
 
     halfLength = this.length.getValue() / 2;
@@ -119,10 +121,14 @@ export class Turtle {
   }
 
   boost() {
-    this.width.setValue(5);
-    this.width.setDelta(0.1);
+    this.color.setOscillationSpeedFactor(5.0);
+    setTimeout(() => {
+      this.color.setOscillationSpeedFactor(0.4);
+    }, 1500);
     this.speed.setToMax();
     this.speed.setDelta(-0.002);
+    this.width.setValue(5);
+    this.width.setDelta(0.1);
   }
 
   explode() {

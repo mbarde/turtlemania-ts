@@ -38,8 +38,8 @@ button:hover {
 }
 
 #turtlemania-canvas {
-  background-color: #ea6b2f;
-  border: 2px solid white;
+  background-color: white;
+  border: 2px solid black;
   display: block;
   margin: auto;
   width: 100%;
